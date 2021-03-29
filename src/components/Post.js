@@ -1,13 +1,16 @@
 import React from 'react';
+import Grid from '../elements/Grid';
 
 const Post = () => {
     
     return (
         <React.Fragment>
-            <div>유저프로필/ 유저이름/ 게시글 작성시간/ 나인지확인하는버튼(수정)</div>
-            <div>게시물내용</div>
-            <div>사진</div>
-            <div>댓글갯수</div>
+            <Grid padding = "16px">
+                <div>유저프로필/ 유저이름/ 게시글 작성시간/ 나인지확인하는버튼(수정)</div>
+                <div>게시물내용</div>
+                <div>사진</div>
+                <div>댓글갯수</div>
+            </Grid>
         </React.Fragment>
     )
 }
