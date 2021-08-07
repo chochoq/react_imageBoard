@@ -74,7 +74,6 @@ const deleteLikeFB = (user_id, post_id) => {
         // 좋아요 수 증가시키기
         const increment = firebase.firestore.FieldValue.increment(-1);
         postDB.doc(post_id).update({ like_cnt: increment }).then((_post => {
-        console.log(post_id);
 
         if (post) {
 

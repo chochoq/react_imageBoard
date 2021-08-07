@@ -27,6 +27,8 @@ import LikeButton from '../components/LikeButton';
 // id : 게시글 id
 // contents : 게시글 내용
 
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -43,12 +45,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
 const Post = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   
-
   return (
     <Card className={classes.root,classes.margin}  >
       <Grid >
@@ -73,7 +73,6 @@ const Post = (props) => {
                     // 이벤트 캡쳐링, 버블링이 뭔지 검색해보기! :)
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log("안뇽")
                     history.push(`/write/${props.id}`);
                   }}
                 >
@@ -103,12 +102,42 @@ const Post = (props) => {
             )}
           </Grid>
         </Grid>
-        <Grid padding="16px" >
-          <Text>{props.contents}</Text>
-        </Grid>
-        <Grid>
-          <Image shape="rectangle" src={props.image_url} />
-        </Grid>
+
+        {/* layout type이 a일 때 */}
+        {props.layout_type === "c" && (
+          <React.Fragment>
+            <Grid padding="16px">
+              <Text>{props.contents}</Text>
+            </Grid>
+            <Grid>
+              <Image shape="rectangle" src={props.image_url} />
+            </Grid>
+          </React.Fragment>
+        )}
+
+        {/* layout type이 b일 때 */}
+        {props.layout_type === "b" && (
+          <React.Fragment>
+            <Grid is_flex>
+              <Grid width="50%" padding="16px">
+                <Text>{props.contents}</Text>
+              </Grid>
+              <Image shape="rectangle" src={props.image_url} />
+            </Grid>
+          </React.Fragment>
+        )}
+
+        {/* layout type이 c일 때 */}
+        {props.layout_type === "a" && (
+          <React.Fragment>
+            <Grid is_flex>
+              <Image shape="rectangle" src={props.image_url} />
+              <Grid width="50%" padding="16px">
+                <Text>{props.contents}</Text>
+              </Grid>
+            </Grid>
+          </React.Fragment>
+        )}
 
         {/* 좋아요 */}
         <Grid is_flex padding="16px">
@@ -134,6 +163,7 @@ Post.defaultProps = {
   image_url: "",
   contents: "",
   like_cnt: 10,
+  layout_type: "a",
   like_none: false,
   insert_dt: "",
   is_me: false,

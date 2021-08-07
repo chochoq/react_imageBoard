@@ -12,6 +12,7 @@ const EDIT_POST = "EDIT_POST";
 const DELETE_POST = "DELETE_POST";
 const LOADING = "LOADING";
 
+
 const setPost = createAction(SET_POST, (post_list, paging) => ({
   post_list,
   paging
@@ -48,6 +49,7 @@ const initialPost = {
   contents: "",
   like_none: false,
   like_cnt: 0,
+  layout_type: "a",
   insert_dt: moment().format("YYYY-MM-DD HH:mm:ss"),
 };
 
@@ -64,7 +66,6 @@ const editPostFB = (post_id = null, post = {}) => {
     const _post_idx = getState().post.list.findIndex((p) => p.id === post_id);
     // 수정하려는 게시글의 (기존)정보를 가져온다
     const _post = getState().post.list[_post_idx];
-    // console.log(_post);
     
     // 파이어스토어에서 콜렉션 선택하기
     const postDB = firestore.collection("post");
@@ -96,7 +97,6 @@ const editPostFB = (post_id = null, post = {}) => {
         snapshot.ref
           .getDownloadURL()
           .then((url) => {
-            // console.log(url);
             return url;
           })
           .then((url) => {
@@ -123,7 +123,7 @@ const editPostFB = (post_id = null, post = {}) => {
 };
 
 // 게시글 추가
-const addPostFB = (contents = "") => {
+const addPostFB = (contents = "",layout_type="a") => {
   return function (dispatch, getState, { history }) {
     // 파이어스토어에서 콜렉션부터 잡아준다.
     const postDB = firestore.collection("post");
@@ -140,6 +140,7 @@ const addPostFB = (contents = "") => {
     const _post = {
       ...initialPost,
       contents: contents,
+      layout_type: layout_type,
       insert_dt: moment().format("YYYY년MM월DD일 HH시mm분"),
     };
 
@@ -294,9 +295,6 @@ const getOnePostFB = (id) => {
       .doc(id)
       .get()
       .then((doc) => {
-        console.log(doc);
-        console.log(doc.data()); 
-
         let _post = doc.data();
         let post = Object.keys(_post).reduce(
           (acc, cur) => {

@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Grid, Text, Button } from "../elements";
+import RadioButtons from '../components/RadioButton';
 
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
@@ -24,10 +25,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
-
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
 import SvgIcon from '@material-ui/core/SvgIcon';
+
 
 const drawerWidth = "30%";
 
@@ -92,7 +92,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function HomeIcon(props) {
   return (
     <SvgIcon {...props} >
@@ -101,13 +100,12 @@ function HomeIcon(props) {
   );
 }
 
-
-
 const Header = (props) => {
 
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const post_list = useSelector((state) => state.post.list);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -124,7 +122,19 @@ const Header = (props) => {
 
   const is_session = sessionStorage.getItem(_session_key)? true : false;
   
-  console.log(is_session);
+  // console.log(is_session);
+
+  // layout_type을 정하는 부분입니다!
+  const [layout_type, setLayoutType] = React.useState(
+    post_list ? post_list.layout_type : ""
+  );
+
+  // 레이아웃 타입을 정해주는 함수
+  // useState를 이용해요!
+  const changeLayoutType = (e) => {
+    setLayoutType(e.target.value);
+  };
+
 
   if (is_login && is_session) {
     return (
@@ -171,13 +181,13 @@ const Header = (props) => {
             </div>
             <Divider />
             <List>
-              {['chonterest', 'logout'].map((text, index) => (
+              {/* {['chonterest', 'logout'].map((text, index) => (
                 <ListItem button key={text}>
                   <ListItemIcon>{index % 2 === 0 ?
                     <HomeIcon> </HomeIcon> : <ExitToAppIcon />}</ListItemIcon>
                   <ListItemText primary={text} />
                 </ListItem>
-              ))}
+              ))} */}
               
               {/* todo */}
               <Button margin="0px" size="24px" bold
@@ -193,6 +203,16 @@ const Header = (props) => {
                   dispatch(userActions.logoutFB());
                 }}
               ></Button>
+              <Divider />
+            <Text margin="20px" size="10px" bold>
+              레이아웃 설정
+              <RadioButtons
+              type="text"
+              value={layout_type}
+              _onChange={changeLayoutType}
+              label="레이아웃 타입"
+              ></RadioButtons>
+            </Text>
             </List>
             
             <Divider />
@@ -247,12 +267,12 @@ const Header = (props) => {
             <Divider />
           <List>
             
-            {['Login', 'JoinUs'].map((text, index) => (
+            {/* {['Login', 'JoinUs'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ?<VpnKeyIcon/> : <EmojiEmotionsIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
-            ))}
+            ))} */}
             <Button margin="0px" size="24px" bold
                 _onClick={() => {
                   history.push("/");
@@ -271,46 +291,20 @@ const Header = (props) => {
             _onClick={() => {
               history.push("/signup");
             }}
-          ></Button>
-
+            ></Button>
+            <Divider />
+            <Text margin="20px" size="10px" bold>
+              레이아웃 설정
+              <RadioButtons
+              value={layout_type}
+              _onChange={changeLayoutType}
+              label="레이아웃 타입"
+              ></RadioButtons>
+            </Text>
           </List>
           <Divider />
-
-
-          <Grid is_flex>
-          
-        </Grid>
-          </Drawer>
-            
-          
+        </Drawer>
       </Grid>
-{/*       
-
-      <Grid is_flex padding="4px 16px">
-        <Grid>
-          <Button margin="0px" size="24px"
-            _onClick={() => {
-              history.push("/");
-            }}>
-            헬로
-          </Button>
-        </Grid>
-
-        <Grid is_flex>
-          <Button
-            text="로그인"
-            _onClick={() => {
-              history.push("/login");
-            }}
-          ></Button>
-          <Button
-            text="회원가입"
-            _onClick={() => {
-              history.push("/signup");
-            }}
-          ></Button>
-        </Grid>
-      </Grid> */}
     </React.Fragment>
   );
 };
